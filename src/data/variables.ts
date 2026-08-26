@@ -81,84 +81,125 @@ export interface VariableDefinition {
  *    { defaultValue: { x: 5, y: 10 }, type: 'object', schema: '{ x: number, y: number }' }
  */
 export const variableDefinitions: Record<string, VariableDefinition> = {
-    // ========================================
-    // ADD YOUR VARIABLES HERE
-    // ========================================
-
-    // Uncomment and modify these examples for your lesson:
-
-    /*
-    // ─────────────────────────────────────────
-    // NUMBER - Use with sliders
-    // ─────────────────────────────────────────
-    myValue: {
+    // ============================================================
+    // SECTION 2 — From Mystery Box to Letter
+    // ============================================================
+    sweetsInPack: {
         defaultValue: 5,
         type: 'number',
-        label: 'My Value',
-        description: 'A number that controls something',
-        unit: 'm',           // optional unit display
+        label: 'Sweets hidden in the pack',
+        description: 'The number the letter n stands for in the mystery pack figure',
+        min: 1,
+        max: 8,
+        step: 1,
+        color: '#62D0AD',
+    },
+    packHighlight: {
+        defaultValue: '',
+        type: 'text',
+        label: 'Pack highlight',
+        description: 'Linked highlight between the prose and the mystery pack drawing',
+        color: '#2A9D7C',
+        bgColor: 'rgba(98, 208, 173, 0.22)',
+    },
+    answerPackTotal: {
+        defaultValue: '',
+        type: 'text',
+        label: 'Pack total answer',
+        description: 'Student answer for n + 3 when the pack holds 7 sweets',
+        placeholder: '???',
+        correctAnswer: '10',
+        color: '#8E90F5',
+    },
+
+    // ============================================================
+    // SECTION 3 — A Letter Is a Number, Not a Thing
+    // ============================================================
+    letterValue: {
+        defaultValue: 0,
+        type: 'number',
+        label: 'Number in the slot',
+        description: 'The number currently standing in place of the letter c (0 means the slot is empty)',
         min: 0,
         max: 10,
-        step: 0.5,
+        step: 1,
+        color: '#62D0AD',
     },
-
-    // ─────────────────────────────────────────
-    // TEXT - Free text input
-    // ─────────────────────────────────────────
-    lessonTitle: {
-        defaultValue: 'My Lesson',
+    cookieHighlight: {
+        defaultValue: '',
         type: 'text',
-        label: 'Lesson Title',
-        description: 'The title of your lesson',
-        placeholder: 'Enter a title...',
+        label: 'Substitution highlight',
+        description: 'Linked highlight between the prose and the substitution slot or cookie tile',
+        color: '#2A9D7C',
+        bgColor: 'rgba(98, 208, 173, 0.22)',
     },
-
-    // ─────────────────────────────────────────
-    // SELECT - Dropdown with options
-    // ─────────────────────────────────────────
-    difficulty: {
-        defaultValue: 'medium',
+    answerLetterMeaning: {
+        defaultValue: '',
         type: 'select',
-        label: 'Difficulty',
-        description: 'The difficulty level of the lesson',
-        options: ['easy', 'medium', 'hard', 'expert'],
+        label: 'What the letter stands for',
+        description: 'Student answer naming what the letter c stands for',
+        placeholder: '???',
+        correctAnswer: 'a number',
+        options: ['a cookie', 'a number', 'the jar'],
+        color: '#8E90F5',
+    },
+    answerSubstituteEight: {
+        defaultValue: '',
+        type: 'text',
+        label: 'Substitution answer',
+        description: 'Student answer for c + 4 when c is 8',
+        placeholder: '???',
+        correctAnswer: '12',
+        color: '#8E90F5',
     },
 
-    // ─────────────────────────────────────────
-    // BOOLEAN - Toggle switch
-    // ─────────────────────────────────────────
-    showHints: {
-        defaultValue: true,
-        type: 'boolean',
-        label: 'Show Hints',
-        description: 'Toggle to show or hide hints',
+    // ============================================================
+    // SECTION 4 — Building 2 + 3n Step by Step
+    // ============================================================
+    cupsOrdered: {
+        defaultValue: 0,
+        type: 'number',
+        label: 'Cups on the tray',
+        description: 'How many bubble tea cups the student has dragged onto the tray',
+        min: 0,
+        max: 5,
+        step: 1,
+        color: '#62D0AD',
     },
-
-    // ─────────────────────────────────────────
-    // ARRAY - List of numbers
-    // ─────────────────────────────────────────
-    dataPoints: {
-        defaultValue: [1, 4, 9, 16, 25],
-        type: 'array',
-        label: 'Data Points',
-        description: 'Y-values for plotting a graph',
+    routeChoice: {
+        defaultValue: '',
+        type: 'select',
+        label: 'Predicted route',
+        description: 'Which route the student predicts will match the coins on the counter',
+        options: ['add first', 'multiply first'],
     },
-
-    // ─────────────────────────────────────────
-    // OBJECT - Complex structured data
-    // ─────────────────────────────────────────
-    graphSettings: {
-        defaultValue: { 
-            xMin: -10, 
-            xMax: 10, 
-            showGrid: true 
-        },
-        type: 'object',
-        label: 'Graph Settings',
-        description: 'Configuration for the graph display',
-        schema: '{ xMin: number, xMax: number, showGrid: boolean }',
+    teaHighlight: {
+        defaultValue: '',
+        type: 'text',
+        label: 'Bubble tea highlight',
+        description: 'Linked highlight between the prose and the carrier fee coins',
+        color: '#475569',
+        bgColor: 'rgba(100, 116, 139, 0.18)',
     },
-    */
+    answerFourCups: {
+        defaultValue: '',
+        type: 'select',
+        label: 'Cost of four cups',
+        description: 'Student answer for the total coins for an order of four cups',
+        placeholder: '???',
+        correctAnswer: '14',
+        options: ['12', '14', '20'],
+        color: '#8E90F5',
+    },
+    answerSevenCups: {
+        defaultValue: '',
+        type: 'text',
+        label: 'Cost of seven cups',
+        description: 'Student answer for 2 + 3n when n is 7',
+        placeholder: '???',
+        correctAnswer: '23',
+        color: '#8E90F5',
+    },
 };
 
 /**

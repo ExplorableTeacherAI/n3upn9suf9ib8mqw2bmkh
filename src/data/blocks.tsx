@@ -84,6 +84,16 @@ initializeVariableColors(variableDefinitions);
  * check your .env file and set VITE_SHOW_EXAMPLES=false.
  */
 
+import { lettersOrientationBlocks } from "./sections/lettersOrientation";
+import { mysteryPackBlocks } from "./sections/mysteryPackSection";
+import { substitutionBlocks } from "./sections/substitutionSection";
+import { bubbleTeaBlocks } from "./sections/bubbleTeaSection";
+import { lettersConclusionBlocks } from "./sections/lettersConclusion";
+
 export const blocks: ReactElement[] = [
-    // Start adding your blocks here!
+    ...lettersOrientationBlocks,
+    ...mysteryPackBlocks,
+    ...substitutionBlocks,
+    ...bubbleTeaBlocks,
+    ...lettersConclusionBlocks,
 ];
