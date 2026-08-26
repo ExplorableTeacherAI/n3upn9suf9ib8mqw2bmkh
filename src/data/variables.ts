@@ -166,12 +166,12 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         step: 1,
         color: '#62D0AD',
     },
-    routeChoice: {
+    teaGuess: {
         defaultValue: '',
         type: 'select',
-        label: 'Predicted route',
-        description: 'Which route the student predicts will match the coins on the counter',
-        options: ['add first', 'multiply first'],
+        label: 'Guessed cost of three cups',
+        description: 'The student guess for what three cups of bubble tea will cost, made before building the order',
+        options: ['9', '11', '15'],
     },
     teaHighlight: {
         defaultValue: '',
