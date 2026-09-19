@@ -9,9 +9,10 @@ import {
     InlineClozeInput,
     InlineClozeChoice,
     InlineFeedback,
+    InlineFormula,
     InteractionHintSequence,
 } from "@/components/atoms";
-import { Figure } from "@/components/molecules";
+import { Figure, FormulaBlock } from "@/components/molecules";
 import { useVar, useSetVar } from "@/stores";
 import { clamp, type Vec2 } from "@/lib/motion";
 import {
@@ -20,6 +21,7 @@ import {
     clozePropsFromDefinition,
     choicePropsFromDefinition,
     linkedHighlightPropsFromDefinition,
+    scrubVarsFromDefinitions,
 } from "../variables";
 
 // ── Domain model ─────────────────────────────────────────────────────────────
@@ -50,8 +52,9 @@ const INK_STRUCTURE = "#64748B";
 const INK_QUIET = "#CBD5E1";
 const PAPER = "#F8FAFC";
 const ACCENT = "#62D0AD";
-const PARTNER = "#8E90F5";
-const FEE_INK = "#94A3B8";
+const PARTNER = "#8E90F5"; // the total
+const COIN = "#F7B23B"; // the 3 coins every cup brings
+const FEE_INK = "#F8A0CD"; // the carrier fee, added once
 
 const cupX = (index: number) => CUP_FIRST_X + index * CUP_SPACING;
 
@@ -153,7 +156,7 @@ function BubbleTeaDrawing() {
                                 cx={cupX(index) + offset}
                                 cy={COIN_Y}
                                 r={COIN_RADIUS}
-                                fill={PARTNER}
+                                fill={COIN}
                             />
                         ))}
                     </g>
@@ -197,7 +200,16 @@ function BubbleTeaDrawing() {
                 opacity={dimmed}
                 style={{ ...ease, fontVariantNumeric: "tabular-nums" }}
             >
-                {`${cups} × 3 = ${teaCoins}, then + 2 = ${totalCoins} coins`}
+                <tspan fill={ACCENT} fontWeight="600">{cups}</tspan>
+                <tspan>{" × "}</tspan>
+                <tspan fill={COIN} fontWeight="600">3</tspan>
+                <tspan>{" = "}</tspan>
+                <tspan fill={COIN} fontWeight="600">{teaCoins}</tspan>
+                <tspan>{", then + "}</tspan>
+                <tspan fill={FEE_INK} fontWeight="600">2</tspan>
+                <tspan>{" = "}</tspan>
+                <tspan fill={PARTNER} fontWeight="600">{totalCoins}</tspan>
+                <tspan>{" coins"}</tspan>
             </text>
 
             {/* Drag surfaces */}
@@ -339,12 +351,34 @@ function BubbleTeaFigure() {
 
 function TeaCoinsText() {
     const cups = useVar<number>("cupsOrdered", 0);
-    return <span style={{ color: PARTNER, fontWeight: 600 }}>{COINS_PER_CUP * cups}</span>;
+    return <span style={{ color: COIN, fontWeight: 600 }}>{COINS_PER_CUP * cups}</span>;
 }
 
 function TeaTotalText() {
     const cups = useVar<number>("cupsOrdered", 0);
     return <span style={{ color: PARTNER, fontWeight: 600 }}>{CARRIER_FEE + COINS_PER_CUP * cups}</span>;
+}
+
+// The lesson's headline expression, live: drag n here and the cups on the counter
+// follow, drag cups on the counter and n follows. Hovering the 2 lights the carrier coins.
+function TeaExpressionFormula() {
+    const cups = useVar<number>("cupsOrdered", 0);
+    const total = CARRIER_FEE + COINS_PER_CUP * cups;
+
+    return (
+        <FormulaBlock
+            latex={`\\highlight{fee}{2} + \\clr{rate}{3} \\times \\scrub{cupsOrdered} = \\clr{total}{${total}}`}
+            colorMap={{ rate: COIN, total: PARTNER }}
+            variables={scrubVarsFromDefinitions(["cupsOrdered"])}
+            linkedHighlights={{
+                fee: {
+                    varName: "teaHighlight",
+                    ...linkedHighlightPropsFromDefinition(getVariableInfo("teaHighlight")),
+                    color: FEE_INK, // same hex as the carrier coins
+                },
+            }}
+        />
+    );
 }
 
 // ── Blocks ───────────────────────────────────────────────────────────────────
@@ -361,7 +395,8 @@ export const bubbleTeaBlocks: ReactElement[] = [
     <StackLayout key="layout-bubble-tea-setup" maxWidth="xl">
         <Block id="bubble-tea-setup" padding="sm">
             <EditableParagraph id="para-bubble-tea-setup" blockId="bubble-tea-setup">
-                Bubble tea costs 3 coins a cup, and the stall adds{" "}
+                Bubble tea costs <InlineFormula id="formula-bubble-tea-setup-rate" latex="\clr{rate}{3}" colorMap={{ rate: "#F7B23B" }} />{" "}
+                coins a cup, and the stall adds{" "}
                 <InlineLinkedHighlight
                     varName="teaHighlight"
                     highlightId="fee"
@@ -370,7 +405,8 @@ export const bubbleTeaBlocks: ReactElement[] = [
                     2 coins for the carrier
                 </InlineLinkedHighlight>
                 . Make your guess first, then drag cups across and watch each one bring its
-                own 3 coins with it.
+                own <InlineFormula id="formula-bubble-tea-setup-own-coins" latex="\clr{rate}{3}" colorMap={{ rate: "#F7B23B" }} />{" "}
+                coins with it.
             </EditableParagraph>
         </Block>
     </StackLayout>,
@@ -385,8 +421,11 @@ export const bubbleTeaBlocks: ReactElement[] = [
         <Block id="bubble-tea-reflection" padding="sm">
             <EditableParagraph id="para-bubble-tea-reflection" blockId="bubble-tea-reflection">
                 The coins never lie. Only the cups multiply, because the carrier is paid
-                once for the whole order, so you work out the cups first and add the 2 at
-                the end. That is exactly what 2 + 3n means.
+                once for the whole order, so you work out the cups first and add the{" "}
+                <InlineFormula id="formula-bubble-tea-reflection-fee" latex="\clr{fixed}{2}" colorMap={{ fixed: "#F8A0CD" }} />{" "}
+                at the end. That is exactly what{" "}
+                <InlineFormula id="formula-bubble-tea-reflection-expression" latex="\clr{fixed}{2} + \clr{rate}{3}\clr{letter}{n}" colorMap={{ fixed: "#F8A0CD", rate: "#F7B23B", letter: "#62D0AD" }} />{" "}
+                means.
             </EditableParagraph>
         </Block>
     </StackLayout>,
@@ -399,16 +438,25 @@ export const bubbleTeaBlocks: ReactElement[] = [
                     varName="cupsOrdered"
                     {...numberPropsFromDefinition(getVariableInfo("cupsOrdered"))}
                 />{" "}
-                cups in the order the tea costs 3 × n = <TeaCoinsText /> coins, and the
+                cups in the order the tea costs{" "}
+                <InlineFormula id="formula-bubble-tea-worked-product" latex="\clr{rate}{3} \times \clr{letter}{n} =" colorMap={{ rate: "#F7B23B", letter: "#62D0AD" }} />{" "}
+                <TeaCoinsText /> coins, and the
                 carrier brings it to <TeaTotalText /> coins in all.
             </EditableParagraph>
+        </Block>
+    </StackLayout>,
+
+    <StackLayout key="layout-bubble-tea-live-formula" maxWidth="xl">
+        <Block id="bubble-tea-live-formula" padding="sm">
+            <TeaExpressionFormula />
         </Block>
     </StackLayout>,
 
     <StackLayout key="layout-bubble-tea-order-question" maxWidth="xl">
         <Block id="bubble-tea-order-question" padding="md">
             <EditableParagraph id="para-bubble-tea-order-question" blockId="bubble-tea-order-question">
-                A friend orders 4 cups from the same stall. Counting the carrier, the number
+                A friend orders <InlineFormula id="formula-bubble-tea-order-four" latex="\clr{letter}{4}" colorMap={{ letter: "#62D0AD" }} />{" "}
+                cups from the same stall. Counting the carrier, the number
                 of coins that order costs is{" "}
                 <InlineFeedback
                     varName="answerFourCups"
@@ -448,8 +496,11 @@ export const bubbleTeaBlocks: ReactElement[] = [
     <StackLayout key="layout-bubble-tea-practice" maxWidth="xl">
         <Block id="bubble-tea-practice" padding="md">
             <EditableParagraph id="para-bubble-tea-practice" blockId="bubble-tea-practice">
-                A study group turns up and orders 7 cups. Putting 7 in place of n, the
-                expression 2 + 3n comes to{" "}
+                A study group turns up and orders 7 cups. Putting{" "}
+                <InlineFormula id="formula-bubble-tea-practice-seven" latex="\clr{letter}{7}" colorMap={{ letter: "#62D0AD" }} />{" "}
+                in place of <InlineFormula id="formula-bubble-tea-practice-n" latex="\clr{letter}{n}" colorMap={{ letter: "#62D0AD" }} />, the
+                expression <InlineFormula id="formula-bubble-tea-practice-expression" latex="\clr{fixed}{2} + \clr{rate}{3}\clr{letter}{n}" colorMap={{ fixed: "#F8A0CD", rate: "#F7B23B", letter: "#62D0AD" }} />{" "}
+                comes to{" "}
                 <InlineFeedback
                     varName="answerSevenCups"
                     correctValue="23"

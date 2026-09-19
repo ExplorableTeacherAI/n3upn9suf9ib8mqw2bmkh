@@ -8,6 +8,8 @@ import {
     InlineClozeInput,
     InlineClozeChoice,
     InlineFeedback,
+    InlineFormula,
+    InlineTrigger,
     InteractionHintSequence,
 } from "@/components/atoms";
 import { Figure } from "@/components/molecules";
@@ -41,6 +43,7 @@ const PAPER = "#F8FAFC";
 const ACCENT = "#62D0AD";
 const PARTNER = "#8E90F5";
 const CAUTION = "#F7B23B";
+const FIXED = "#F8A0CD"; // the number that is added once (the + 4)
 const COOKIE = "#FFCBA4";
 
 interface Tile {
@@ -212,7 +215,8 @@ function SubstitutionDrawing() {
                     </text>
                 </g>
                 <text x="288" y="132" fill={INK} fontSize="30">
-                    + 4
+                    <tspan fill={INK}>+ </tspan>
+                    <tspan fill={FIXED} fontWeight="600">4</tspan>
                 </text>
                 <text x="364" y="132" fill={INK} fontSize="30">
                     =
@@ -344,7 +348,8 @@ export const substitutionBlocks: ReactElement[] = [
     <StackLayout key="layout-substitution-setup" maxWidth="xl">
         <Block id="substitution-setup" padding="sm">
             <EditableParagraph id="para-substitution-setup" blockId="substitution-setup">
-                Here is the trap. The letter c is not a cookie, it is the number of cookies,
+                Here is the trap. The letter <InlineFormula id="formula-substitution-setup-c" latex="\clr{letter}{c}" colorMap={{ letter: "#62D0AD" }} />{" "}
+                is not a cookie, it is the number of cookies,
                 so a real number can stand in its place. Drag a tile into{" "}
                 <InlineLinkedHighlight
                     varName="cookieHighlight"
@@ -353,7 +358,8 @@ export const substitutionBlocks: ReactElement[] = [
                 >
                     the empty box
                 </InlineLinkedHighlight>{" "}
-                and watch c + 4 turn into ordinary arithmetic.
+                and watch <InlineFormula id="formula-substitution-setup-expression" latex="\clr{letter}{c} + \clr{fixed}{4}" colorMap={{ letter: "#62D0AD", fixed: "#F8A0CD" }} />{" "}
+                turn into ordinary arithmetic.
             </EditableParagraph>
         </Block>
     </StackLayout>,
@@ -375,8 +381,27 @@ export const substitutionBlocks: ReactElement[] = [
                     The cookie tile
                 </InlineLinkedHighlight>{" "}
                 bounces straight back out, and that is the whole point: only numbers fit
-                where a letter sits. Swap in 3 and the box reads 7, swap in 6 and it reads
-                10.
+                where a letter sits.{" "}
+                <InlineTrigger
+                    id="trigger-substitution-swap-three"
+                    varName="letterValue"
+                    value={3}
+                    color="#2A9D7C"
+                    bgColor="rgba(98, 208, 173, 0.18)"
+                >
+                    Swap in 3
+                </InlineTrigger>{" "}
+                and the box reads <InlineFormula id="formula-substitution-reflection-seven" latex="\clr{total}{7}" colorMap={{ total: "#8E90F5" }} />,{" "}
+                <InlineTrigger
+                    id="trigger-substitution-swap-six"
+                    varName="letterValue"
+                    value={6}
+                    color="#2A9D7C"
+                    bgColor="rgba(98, 208, 173, 0.18)"
+                >
+                    swap in 6
+                </InlineTrigger>{" "}
+                and it reads <InlineFormula id="formula-substitution-reflection-ten" latex="\clr{total}{10}" colorMap={{ total: "#8E90F5" }} />.
             </EditableParagraph>
         </Block>
     </StackLayout>,
@@ -384,7 +409,9 @@ export const substitutionBlocks: ReactElement[] = [
     <StackLayout key="layout-substitution-meaning-question" maxWidth="xl">
         <Block id="substitution-meaning-question" padding="md">
             <EditableParagraph id="para-substitution-meaning-question" blockId="substitution-meaning-question">
-                So in the expression c + 4, the letter c stands for{" "}
+                So in the expression <InlineFormula id="formula-substitution-meaning-expression" latex="\clr{letter}{c} + \clr{fixed}{4}" colorMap={{ letter: "#62D0AD", fixed: "#F8A0CD" }} />,
+                the letter <InlineFormula id="formula-substitution-meaning-c" latex="\clr{letter}{c}" colorMap={{ letter: "#62D0AD" }} />{" "}
+                stands for{" "}
                 <InlineFeedback
                     varName="answerLetterMeaning"
                     correctValue="a number"
@@ -423,7 +450,10 @@ export const substitutionBlocks: ReactElement[] = [
     <StackLayout key="layout-substitution-practice" maxWidth="xl">
         <Block id="substitution-practice" padding="md">
             <EditableParagraph id="para-substitution-practice" blockId="substitution-practice">
-                A jar is opened and counted: it holds 8 cookies. That makes c + 4 equal to{" "}
+                A jar is opened and counted: it holds{" "}
+                <InlineFormula id="formula-substitution-practice-eight" latex="\clr{letter}{8}" colorMap={{ letter: "#62D0AD" }} />{" "}
+                cookies. That makes <InlineFormula id="formula-substitution-practice-expression" latex="\clr{letter}{c} + \clr{fixed}{4}" colorMap={{ letter: "#62D0AD", fixed: "#F8A0CD" }} />{" "}
+                equal to{" "}
                 <InlineFeedback
                     varName="answerSubstituteEight"
                     correctValue="12"

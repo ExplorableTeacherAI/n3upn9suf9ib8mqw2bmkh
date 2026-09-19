@@ -1,7 +1,7 @@
 import { type ReactElement } from "react";
 import { StackLayout } from "@/components/layouts";
 import { Block } from "@/components/templates";
-import { EditableH1, EditableParagraph } from "@/components/atoms";
+import { EditableH1, EditableParagraph, InlineFormula, InlineTooltip } from "@/components/atoms";
 
 export const lettersOrientationBlocks: ReactElement[] = [
     <StackLayout key="layout-letters-title" maxWidth="xl">
@@ -30,7 +30,15 @@ export const lettersOrientationBlocks: ReactElement[] = [
                 You have done this before without noticing. Every time you filled in a
                 missing number box like 3 + ? = 10, you were handling a number nobody had
                 told you yet. By the end of this page you will be able to put a real number
-                in a letter's place and work out what expressions like n + 3 and 2 + 3n
+                in a letter's place and work out what{" "}
+                <InlineTooltip
+                    id="tooltip-letters-promise-expression"
+                    tooltip="A maths phrase built from numbers, letters and signs like + or ×. It has no equals sign, so it is a recipe for a number rather than a statement."
+                >
+                    expressions
+                </InlineTooltip>{" "}
+                like <InlineFormula id="formula-letters-promise-n-plus-three" latex="\clr{letter}{n} + \clr{fixed}{3}" colorMap={{ letter: "#62D0AD", fixed: "#F8A0CD" }} />{" "}
+                and <InlineFormula id="formula-letters-promise-two-plus-three-n" latex="\clr{fixed}{2} + \clr{rate}{3}\clr{letter}{n}" colorMap={{ fixed: "#F8A0CD", rate: "#F7B23B", letter: "#62D0AD" }} />{" "}
                 come to.
             </EditableParagraph>
         </Block>

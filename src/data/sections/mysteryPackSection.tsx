@@ -8,6 +8,7 @@ import {
     InlineLinkedHighlight,
     InlineClozeInput,
     InlineFeedback,
+    InlineFormula,
     InteractionHintSequence,
 } from "@/components/atoms";
 import { Figure } from "@/components/molecules";
@@ -45,6 +46,7 @@ const INK_QUIET = "#CBD5E1";
 const PAPER = "#F8FAFC";
 const ACCENT = "#62D0AD";
 const PARTNER = "#8E90F5";
+const FIXED = "#F8A0CD"; // the number that is added once (the 3 loose sweets)
 
 const gripCenterY = (count: number) => SWEET_BASE_Y - (count - 1) * SWEET_SPACING - 24;
 
@@ -175,14 +177,14 @@ function MysteryPackDrawing() {
             <g opacity={dimOthers} style={ease}>
                 {/* The three loose sweets on the counter */}
                 {LOOSE_X.slice(0, LOOSE_SWEETS).map((x) => (
-                    <circle key={x} cx={x} cy={SWEET_BASE_Y} r={SWEET_RADIUS} fill={INK_STRUCTURE} opacity="0.85" />
+                    <circle key={x} cx={x} cy={SWEET_BASE_Y} r={SWEET_RADIUS} fill={FIXED} opacity="0.9" />
                 ))}
 
                 {/* Direct labels under each group */}
                 <text x={PACK_CENTER_X} y="276" fill={ACCENT} fontSize="20" fontWeight="600" textAnchor="middle">
                     n
                 </text>
-                <text x={LOOSE_X[1]} y="276" fill={INK} fontSize="20" fontWeight="600" textAnchor="middle">
+                <text x={LOOSE_X[1]} y="276" fill={FIXED} fontSize="20" fontWeight="600" textAnchor="middle">
                     3
                 </text>
 
@@ -209,7 +211,9 @@ function MysteryPackDrawing() {
                 {/* The same idea written as an expression */}
                 <text x="450" y="152" fontSize="26" textAnchor="middle" style={{ fontVariantNumeric: "tabular-nums" }}>
                     <tspan fill={ACCENT} fontWeight="600">n</tspan>
-                    <tspan fill={INK}> + 3 = </tspan>
+                    <tspan fill={INK}> + </tspan>
+                    <tspan fill={FIXED} fontWeight="600">3</tspan>
+                    <tspan fill={INK}> = </tspan>
                     <tspan fill={PARTNER} fontWeight="600">{total}</tspan>
                 </text>
                 <text
@@ -267,7 +271,8 @@ export const mysteryPackBlocks: ReactElement[] = [
         <Block id="mystery-pack-setup" padding="sm">
             <EditableParagraph id="para-mystery-pack-setup" blockId="mystery-pack-setup">
                 Here is that snack pack on the counter, and we have named the number inside
-                it n. Drag the teal grip on top of{" "}
+                it <InlineFormula id="formula-mystery-pack-setup-n" latex="\clr{letter}{n}" colorMap={{ letter: "#62D0AD" }} />.
+                Drag the teal grip on top of{" "}
                 <InlineLinkedHighlight
                     varName="packHighlight"
                     highlightId="pack"
@@ -275,8 +280,9 @@ export const mysteryPackBlocks: ReactElement[] = [
                 >
                     the pack
                 </InlineLinkedHighlight>{" "}
-                to change how many sweets are hidden, and watch every place n appears move
-                with it.
+                to change how many sweets are hidden, and watch every place{" "}
+                <InlineFormula id="formula-mystery-pack-setup-n-again" latex="\clr{letter}{n}" colorMap={{ letter: "#62D0AD" }} />{" "}
+                appears move with it.
             </EditableParagraph>
         </Block>
     </StackLayout>,
@@ -295,7 +301,14 @@ export const mysteryPackBlocks: ReactElement[] = [
                     varName="sweetsInPack"
                     {...numberPropsFromDefinition(getVariableInfo("sweetsInPack"))}
                 />{" "}
-                sweets sealed in and 3 loose ones beside it, the counter holds n + 3
+                sweets sealed in and{" "}
+                <InlineFormula id="formula-mystery-pack-reflection-three" latex="\clr{fixed}{3}" colorMap={{ fixed: "#F8A0CD" }} />{" "}
+                loose ones beside it, the counter holds{" "}
+                <InlineFormula
+                    id="formula-mystery-pack-reflection-expression"
+                    latex="\clr{letter}{n} + \clr{fixed}{3}"
+                    colorMap={{ letter: "#62D0AD", fixed: "#F8A0CD" }}
+                />{" "}
                 altogether, and that is why the expression keeps agreeing with the bracket
                 underneath the sweets.
             </EditableParagraph>
@@ -305,8 +318,17 @@ export const mysteryPackBlocks: ReactElement[] = [
     <StackLayout key="layout-mystery-pack-practice" maxWidth="xl">
         <Block id="mystery-pack-practice" padding="md">
             <EditableParagraph id="para-mystery-pack-practice" blockId="mystery-pack-practice">
-                Suppose the canteen sold you a bigger pack holding 7 sweets. Keeping the
-                same 3 loose sweets on the counter, n + 3 would come to{" "}
+                Suppose the canteen sold you a bigger pack holding{" "}
+                <InlineFormula id="formula-mystery-pack-practice-seven" latex="\clr{letter}{7}" colorMap={{ letter: "#62D0AD" }} />{" "}
+                sweets. Keeping the same{" "}
+                <InlineFormula id="formula-mystery-pack-practice-three" latex="\clr{fixed}{3}" colorMap={{ fixed: "#F8A0CD" }} />{" "}
+                loose sweets on the counter,{" "}
+                <InlineFormula
+                    id="formula-mystery-pack-practice-expression"
+                    latex="\clr{letter}{n} + \clr{fixed}{3}"
+                    colorMap={{ letter: "#62D0AD", fixed: "#F8A0CD" }}
+                />{" "}
+                would come to{" "}
                 <InlineFeedback
                     varName="answerPackTotal"
                     correctValue="10"

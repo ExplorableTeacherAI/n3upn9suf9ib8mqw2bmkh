@@ -1,7 +1,7 @@
 import { type ReactElement } from "react";
 import { StackLayout } from "@/components/layouts";
 import { Block } from "@/components/templates";
-import { EditableH2, EditableParagraph } from "@/components/atoms";
+import { EditableH2, EditableParagraph, InlineFormula } from "@/components/atoms";
 
 export const lettersConclusionBlocks: ReactElement[] = [
     <StackLayout key="layout-letters-wrapup-heading" maxWidth="xl">
@@ -19,7 +19,8 @@ export const lettersConclusionBlocks: ReactElement[] = [
                 number nobody has told you yet, and the moment you know that number you can
                 drop it into the letter's place and the algebra turns back into the
                 arithmetic you have been doing for years. That is why the snack pack gave
-                you n + 3 the instant you filled it, and why the cookie tile was the only
+                you <InlineFormula id="formula-letters-wrapup-n-plus-three" latex="\clr{letter}{n} + \clr{fixed}{3}" colorMap={{ letter: "#62D0AD", fixed: "#F8A0CD" }} />{" "}
+                the instant you filled it, and why the cookie tile was the only
                 one that refused to fit.
             </EditableParagraph>
         </Block>

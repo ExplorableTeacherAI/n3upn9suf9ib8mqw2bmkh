@@ -178,8 +178,8 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         type: 'text',
         label: 'Bubble tea highlight',
         description: 'Linked highlight between the prose and the carrier fee coins',
-        color: '#475569',
-        bgColor: 'rgba(100, 116, 139, 0.18)',
+        color: '#C9579A',
+        bgColor: 'rgba(248, 160, 205, 0.22)',
     },
     answerFourCups: {
         defaultValue: '',
